@@ -4,7 +4,6 @@ import logging
 import os
 from collections import OrderedDict
 import json
-import re
 import sys
 
 
@@ -99,7 +98,7 @@ class JSONLFormatter:
 
     @staticmethod
     def _close_lines(lines: list, is_array: bool) -> list:
-        return [re.sub(',?\\s*$', '', line) + (']' if is_array else '}') for line in lines]
+        return [line.rstrip(' ').rstrip(',') + (']' if is_array else '}') for line in lines]
 
     @staticmethod
     def _get_keys(data_objects: list) -> list:
