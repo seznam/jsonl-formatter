@@ -4,7 +4,6 @@ import logging
 import os
 from collections import OrderedDict
 import json
-import re
 import sys
 
 
@@ -61,12 +60,13 @@ class JSONLFormatter:
         values = [self._get_value(data_object, key) for data_object in data_objects]
         serialized = []
         max_length = 0
+        cache = []
         for index, value in enumerate(values):
             if value is self.key_not_found:
                 key_value = ''
             else:
                 if isinstance(value, OrderedDict) or isinstance(value, list):
-                    key_value = self._serialize_key_object(key, value, values, index, is_array)
+                    key_value = self._serialize_key_object(key, value, values, index, is_array, cache)
                 else:
                     key_value = self._serialize_key_value(key, value, is_array)
                 key_value += ', '
@@ -77,12 +77,14 @@ class JSONLFormatter:
             for index, key_value in enumerate(serialized)
         ]
 
-    def _serialize_key_object(self, key: str, data_object, data_objects: list, index: int, is_array: bool) -> str:
-        serialized = self._serialize(
-            data_objects,
-            keys=self._get_keys(data_objects),
-            is_array=isinstance(data_object, list)
-        )[index]
+    def _serialize_key_object(self, key: str, data_object, data_objects: list, index: int, is_array: bool, cache: list) -> str:
+        if not cache:
+            cache.extend(self._serialize(
+                data_objects,
+                keys=self._get_keys(data_objects),
+                is_array=isinstance(data_object, list),
+            ))
+        serialized = cache[index]
         if is_array:
             return serialized
         else:
@@ -96,7 +98,7 @@ class JSONLFormatter:
 
     @staticmethod
     def _close_lines(lines: list, is_array: bool) -> list:
-        return [re.sub(',?\\s*$', '', line) + (']' if is_array else '}') for line in lines]
+        return [line.rstrip(' ').rstrip(',') + (']' if is_array else '}') for line in lines]
 
     @staticmethod
     def _get_keys(data_objects: list) -> list:
