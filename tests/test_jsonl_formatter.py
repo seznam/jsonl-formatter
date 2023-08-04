@@ -1,12 +1,11 @@
 import os
 import unittest
-from jsonl_formatter import JSONLFormatter
+from jsonl_formatter import load_and_deserialize, serialize, write, format
 from collections import OrderedDict
 
 
 class TestJSONLFormatter(unittest.TestCase):
     def setUp(self):
-        self.jsonl_formatter = JSONLFormatter()
         self.jsonl_input_file = os.path.join(os.path.dirname(__file__), 'data.jsonl')
         self.jsonl_output_file = self.jsonl_input_file + '.tmp'
         self.expected_loaded_jsonl = [
@@ -22,17 +21,17 @@ class TestJSONLFormatter(unittest.TestCase):
 
     def test_load_and_deserialize(self):
         self.assertEqual(
-            self.jsonl_formatter._load_and_deserialize(self.jsonl_input_file),
+            load_and_deserialize(self.jsonl_input_file),
             self.expected_loaded_jsonl
         )
 
     def test_serialize(self):
         self.assertEqual(
-            self.jsonl_formatter._serialize(self.expected_loaded_jsonl),
+            serialize(self.expected_loaded_jsonl),
             self.expected_serialized_jsonl
         )
 
     def test_write(self):
-        self.jsonl_formatter._write(self.jsonl_output_file, self.expected_serialized_jsonl)
+        write(self.jsonl_output_file, self.expected_serialized_jsonl)
         with open(self.jsonl_output_file, 'r') as file:
             self.assertEqual(file.read(), '\n'.join(self.expected_serialized_jsonl) + '\n')
