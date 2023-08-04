@@ -34,7 +34,7 @@ docker run -v $PWD:/mnt/pwd seznam/jsonl-formatter file_1 [... file_N]
 ## Installation (optional)
 
 * Copy [`jsonl_formatter.py`](jsonl_formatter.py) into `$PYTHONPATH`,
-* or create an alias for Docker `alias jsonl-formatter='docker run -v $PWD:/mnt/pwd seznam/jsonl-formatter'`,
+* or make Docker `make docker` and create an alias for Docker `alias jsonl-formatter='docker run -v $PWD:/mnt/pwd seznam/jsonl-formatter'`,
 * or create a symlink into `$PATH`, f.e. `sudo ln -s $PWD/jsonl_formatter.py /usr/local/bin/jsonl-formatter`.
 
 ## Contribution notes
