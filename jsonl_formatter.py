@@ -177,7 +177,7 @@ def format_jsonl_files(jsonl_files: list) -> None:
         sys.exit(os.EX_IOERR)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(epilog='For more information visit https://github.com/seznam/jsonl-formatter')
     parser.add_argument('jsonl_files', metavar='jsonl_file', type=str, nargs='+', help='JSON Lines files')
     parser.add_argument('-v', '--verbose', action='count', default=0, help='Make it more talkative')
@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         level=(logging.WARNING if args.verbose == 0 else logging.INFO if args.verbose == 1 else logging.DEBUG),
-        format="%(message)s"
+        format='%(message)s'
     )
 
     format_jsonl_files(args.jsonl_files)
